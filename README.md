@@ -2,6 +2,7 @@
 
 Living pokedex Catalogue
 
+This app will be a standalone react app.
 This is a Living Pokedex Catalogue for the first generation pokemon games.
 It will have a box view in which you can see all of the pokemon sprites separated in boxes.
 As the boxes in gen 1 have a capacity of 20, this will be shown in the interface.
@@ -25,20 +26,16 @@ It will use the PokeAPI for data fetching.
 
 ## Hexagonal Architecture
 
-This app will follow the principles of hexagonal architecture.
+This app will follow the principles of hexagonal architecture just for the front end.
 
 - Separation of concerns
 - Dependency rule
 - Ports & Adapters
 - Interchangeability
 
-## Hexagonal Architecture Flow
-
-External Agency -> Adapter -> Port -> Core Logic -> Port -> Adapter -> Database
-
 ## Testing
 
-Domain Models will be tested thoroughly. Everything else comes after.
+Will try to use TDD for testing implementation.
 
 ## Features
 
