@@ -4,11 +4,15 @@ export const CaughtStateValues = {
   PENDING: "PENDING",
 } as const;
 
-export type CaughtStateValues = (typeof CaughtStateValues)[keyof typeof CaughtStateValues];
+export type CaughtStateValues =
+  (typeof CaughtStateValues)[keyof typeof CaughtStateValues];
 
 export class CaughtState {
-  private state: CaughtStateValues;
-  private constructor(state: CaughtStateValues) { this.state = state }
+  private readonly state: CaughtStateValues;
+  private constructor(state: CaughtStateValues) {
+    this.state = state;
+    Object.freeze(this);
+  }
 
   static create() {
     return new CaughtState(CaughtStateValues.NOT_CAUGHT);
@@ -39,7 +43,7 @@ export class CaughtState {
   }
 
   next(): CaughtState {
-    switch(this.state) {
+    switch (this.state) {
       case CaughtStateValues.NOT_CAUGHT:
         return CaughtState.pending();
       case CaughtStateValues.PENDING:

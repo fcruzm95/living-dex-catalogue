@@ -1,11 +1,16 @@
 import { DomainError } from "../errors/DomainError";
 
 export class PokemonId {
-  private _value: number;
+  private readonly _value: number;
 
-  constructor(value: number) {
+  private constructor(value: number) {
     this._validate(value);
     this._value = value;
+    Object.freeze(this);
+  }
+
+  static create(value: number) {
+    return new PokemonId(value);
   }
 
   get value() {
@@ -13,7 +18,7 @@ export class PokemonId {
   }
 
   toString() {
-    return '#' + `${this._value}`.padStart(3, '0')
+    return "#" + `${this._value}`.padStart(3, "0");
   }
 
   equals(pokemonId: PokemonId) {
