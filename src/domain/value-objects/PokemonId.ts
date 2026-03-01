@@ -1,6 +1,8 @@
 import { DomainError } from "../errors/DomainError";
 
 export class PokemonId {
+  static readonly minimum = 1;
+  static readonly maximum = 151;
   private readonly _value: number;
 
   private constructor(value: number) {
@@ -29,7 +31,7 @@ export class PokemonId {
     if (isNaN(value)) {
       throw new DomainError("Value is not a number");
     }
-    if (value < 1 || value > 151) {
+    if (value < PokemonId.minimum || value > PokemonId.maximum) {
       throw new DomainError(`There's no pokemon with id ${value}`);
     }
   }

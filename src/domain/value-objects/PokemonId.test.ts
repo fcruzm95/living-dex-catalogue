@@ -11,6 +11,7 @@ describe("PokemonId tests", () => {
   });
 
   test("rejects invalid id", () => {
+    expect(() => PokemonId.create(999)).toThrowError(DomainError);
     expect(() => PokemonId.create(-1)).toThrowError(DomainError);
     expect(() => PokemonId.create(NaN)).toThrowError(DomainError);
   });
