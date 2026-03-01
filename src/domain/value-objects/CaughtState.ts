@@ -53,10 +53,6 @@ export class CaughtState {
     }
   }
 
-  toString(): string {
-    return this.state;
-  }
-
   equals(other: CaughtState): boolean {
     return this.state === other.state;
   }

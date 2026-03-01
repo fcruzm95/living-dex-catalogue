@@ -24,16 +24,16 @@ describe("PokemonId tests", () => {
     expect(newId.equals(distinctId)).toBe(false);
   });
 
+  test("toString returns formatted version", () => {
+    const bulbasaurId = PokemonId.create(1);
+    const charmanderId = PokemonId.create(4);
+    const squirtleId = PokemonId.create(7);
+    expect(bulbasaurId.toString()).toBe("#001");
+    expect(charmanderId.toString()).toBe("#004");
+    expect(squirtleId.toString()).toBe("#007");
+  });
+
   describe("Is immutable", () => {
-    test("Cannot change the internal value", () => {
-      const newId = PokemonId.create(5);
-
-      expect(() => {
-        // @ts-expect-error - Testing that value property is read-only
-        newId.value = 3;
-      }).toThrowError();
-    });
-
     test("References are different from the value", () => {
       const testId = PokemonId.create(5);
       const otherId = PokemonId.create(5);

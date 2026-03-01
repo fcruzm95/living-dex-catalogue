@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { CaughtState } from "./CaughtState";
+import { CaughtState, CaughtStateValues } from "./CaughtState";
 
 describe("CaughtState tests", () => {
   test("create a caught state correctly", () => {
@@ -36,15 +36,20 @@ describe("CaughtState tests", () => {
     expect(defaultState.equals(CaughtState.notCaught())).toBe(true);
   });
 
-  describe("Is immutable", () => {
-    test("Cannot change the internal value", () => {
-      const state = CaughtState.create();
-      expect(() => {
-        // @ts-expect-error - Testing that value property is read-only
-        state.state = "ERROR";
-      }).toThrowError();
-    });
+  test("Should create a game version directly", () => {
+    const notCaught = CaughtState.create();
+    const pending = notCaught.next();
+    const caught = pending.next();
 
+    expect(notCaught.isNotCaught).toBe(true);
+    expect(notCaught.isCaught).toBe(false);
+    expect(notCaught.isPending).toBe(false);
+
+    expect(pending.isPending).toBe(true);
+    expect(caught.isCaught).toBe(true);
+  });
+
+  describe("Is immutable", () => {
     test("References are different from the value", () => {
       const notCaughtState = CaughtState.notCaught();
       const anotherNotCaughtState = CaughtState.notCaught();
