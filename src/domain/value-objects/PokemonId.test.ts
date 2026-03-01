@@ -19,6 +19,7 @@ describe("PokemonId tests", () => {
     const newId = PokemonId.create(5);
     const equalId = PokemonId.create(5);
     const distinctId = PokemonId.create(3);
+    expect(newId.equals(newId)).toBe(true);
     expect(newId.equals(equalId)).toBe(true);
     expect(newId.equals(distinctId)).toBe(false);
   });
