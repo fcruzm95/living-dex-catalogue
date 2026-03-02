@@ -1,6 +1,6 @@
 import { DomainError } from "../errors/DomainError";
 import { CaughtState } from "../value-objects/CaughtState";
-import { GameVersion, GameVersionValues } from "../value-objects/GameVersion";
+import { GameVersion } from "../value-objects/GameVersion";
 import { PokemonId } from "../value-objects/PokemonId";
 
 export interface PokemonSpeciesData {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { CaughtState, CaughtStateValues } from "./CaughtState";
+import { CaughtState } from "./CaughtState";
 
 describe("CaughtState tests", () => {
   test("create a caught state correctly", () => {
