@@ -19,7 +19,7 @@ describe("PokemonSpecies tests", () => {
       };
       expect(() => PokemonSpecies.create(newPokemonData)).not.toThrowError();
       const bulbasaur = PokemonSpecies.create(newPokemonData);
-      expect(bulbasaur.id.value).toBe(1);
+      expect(bulbasaur.id).toBe(1);
       expect(bulbasaur.name).toBe("Bulbasaur");
       expect(bulbasaur.spriteUrl).toBe(
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/transparent/1.png",

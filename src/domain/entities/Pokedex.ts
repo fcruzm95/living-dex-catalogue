@@ -1,3 +1,4 @@
+import { DomainError } from "../errors/DomainError";
 import type { PokemonSpecies } from "./PokemonSpecies";
 
 interface PokedexData {
@@ -27,7 +28,7 @@ export class Pokedex {
     return this._generation;
   }
 
-  get pokemonList() {
+  get species() {
     return this._species;
   }
 
@@ -35,7 +36,40 @@ export class Pokedex {
     return this._isNationalDex;
   }
 
-  equals(other: Pokedex) {}
+  getPokemon(id: number): PokemonSpecies {
+    const pokemon = this._species.find((pokemon) => pokemon.id === id);
+    if (!pokemon) throw new DomainError("Pokemon does not exist");
+    return pokemon;
+  }
 
-  private _validate(data: PokedexData) {}
+  getProgress() {
+    return (
+      (this._species.filter((pokemon) => pokemon.caughtState.isCaught).length /
+        this._species.length) *
+      100
+    );
+  }
+
+  get isComplete() {
+    return this.getProgress() === 100;
+  }
+
+  equals(other: Pokedex) {
+    return (
+      this._generation === other.generation &&
+      this._isNationalDex === other.isNationalDex &&
+      this._species.length === other.species.length
+    );
+  }
+
+  private _validate(data: PokedexData) {
+    if (data.generation !== 1)
+      throw new DomainError("Pokedex must only be for the first generation");
+    if (data.species.length === 0)
+      throw new DomainError("Pokedex must contain at least one pokemon");
+    if (data.species.find((pokemon) => pokemon.generation !== 1) !== undefined)
+      throw new DomainError(
+        "Pokedex must only contain first generation pokemon",
+      );
+  }
 }

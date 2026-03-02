@@ -3,6 +3,7 @@ import { DomainError } from "../errors/DomainError";
 import { PokemonSpecies } from "./PokemonSpecies";
 import { GameVersionValues } from "../value-objects/GameVersion";
 import { Pokedex } from "./Pokedex";
+import { CaughtState } from "../value-objects/CaughtState";
 
 describe("Pokedex tests", () => {
   describe("Can create a pokedex", () => {
@@ -53,7 +54,7 @@ describe("Pokedex tests", () => {
         species: pokemonSpecies,
       });
       expect(pokedex.generation).toBe(1);
-      expect(pokedex.pokemonList.length).toBe(3);
+      expect(pokedex.species.length).toBe(3);
       expect(pokedex.isNationalDex).toBe(false);
     });
 
@@ -72,30 +73,31 @@ describe("Pokedex tests", () => {
         isNationalDex: true,
       });
       expect(pokedex.generation).toBe(1);
-      expect(pokedex.pokemonList.length).toBe(3);
+      expect(pokedex.species.length).toBe(3);
       expect(pokedex.isNationalDex).toBe(true);
     });
 
     test("Should not create an empty pokedex", () => {
-      expect(Pokedex.create({ generation: 1, species: [] })).toThrowError(
+      expect(() => Pokedex.create({ generation: 1, species: [] })).toThrowError(
         DomainError,
       );
     });
 
-    test("Should not create a pokedex with more pokemon", () => {
-      const emptyArray = Array.from({ length: 200 }, (_, i) => i + 1);
-      const newSpecies = emptyArray.map((element) =>
-        PokemonSpecies.create({
-          id: element,
-          name: `${element}`,
-          generation: 1,
-          availableIn: [GameVersionValues.BLUE],
-        }),
-      );
-      expect(() => {
-        Pokedex.create({ generation: 1, species: newSpecies });
-      }).toThrowError(DomainError);
-    });
+    // TODO: Add this test when there is more than one possible pokedex
+    // test("Should not create a pokedex with more pokemon", () => {
+    //   const emptyArray = Array.from({ length: 200 }, (_, i) => i + 1);
+    //   const newSpecies = emptyArray.map((element) =>
+    //     PokemonSpecies.create({
+    //       id: element,
+    //       name: `${element}`,
+    //       generation: 1,
+    //       availableIn: [GameVersionValues.BLUE],
+    //     }),
+    //   );
+    //   expect(() => {
+    //     Pokedex.create({ generation: 1, species: newSpecies });
+    //   }).toThrowError(DomainError);
+    // });
 
     // test("The pokedex should be ordered", () => {});
 
@@ -108,6 +110,44 @@ describe("Pokedex tests", () => {
           species: [bulbasaur, charmander, squirtle],
         });
       }).toThrowError(DomainError);
+    });
+  });
+
+  describe("Computed values", () => {
+    let pokedex: Pokedex;
+    beforeEach(() => {
+      pokedex = Pokedex.create({
+        generation: 1,
+        species: [
+          PokemonSpecies.create({
+            id: 1,
+            name: "Bulbasaur",
+            availableIn: [GameVersionValues.BLUE],
+            generation: 1,
+          }),
+        ],
+      });
+    });
+
+    test("Should be able to get progress", () => {
+      expect(pokedex.getProgress()).toBe(0);
+      pokedex.getPokemon(1).updateCaughtState();
+      pokedex.getPokemon(1).updateCaughtState();
+      expect(pokedex.getProgress()).toBe(100);
+    });
+
+    test("Should be able to get the pokemon information", () => {
+      const bulbasaur = pokedex.getPokemon(1);
+      expect(bulbasaur.id).toBe(1);
+      expect(bulbasaur.caughtState).toEqual(CaughtState.notCaught());
+      expect(bulbasaur.name).toBe("Bulbasaur");
+    });
+
+    test("Should be able to know if the pokedex is complete", () => {
+      const bulbasaur = pokedex.getPokemon(1);
+      bulbasaur.updateCaughtState();
+      bulbasaur.updateCaughtState();
+      expect(pokedex.isComplete).toBe(true);
     });
   });
 

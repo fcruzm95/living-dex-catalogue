@@ -73,8 +73,8 @@ export class PokemonSpecies {
     );
   }
 
-  get id(): PokemonId {
-    return this._id;
+  get id(): number {
+    return this._id.value;
   }
 
   get caughtState(): CaughtState {
@@ -123,7 +123,7 @@ export class PokemonSpecies {
   }
 
   equals(other: PokemonSpecies) {
-    return this._id.value === other.id.value;
+    return this._id.value === other.id;
   }
 
   private static _formatName(value: string) {
