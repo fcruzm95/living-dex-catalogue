@@ -149,6 +149,12 @@ describe("Pokedex tests", () => {
       bulbasaur.updateCaughtState();
       expect(pokedex.isComplete).toBe(true);
     });
+
+    test("Should throw an error when the getPokemon is using an invalid id", () => {
+      expect(() => {
+        pokedex.getPokemon(999);
+      }).toThrowError(DomainError);
+    });
   });
 
   test("Equality is based in species.length", () => {

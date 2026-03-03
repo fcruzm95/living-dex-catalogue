@@ -67,9 +67,5 @@ export class Pokedex {
       throw new DomainError("Pokedex must only be for the first generation");
     if (data.species.length === 0)
       throw new DomainError("Pokedex must contain at least one pokemon");
-    if (data.species.find((pokemon) => pokemon.generation !== 1) !== undefined)
-      throw new DomainError(
-        "Pokedex must only contain first generation pokemon",
-      );
   }
 }
