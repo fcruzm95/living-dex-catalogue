@@ -10,19 +10,21 @@ interface PokedexData {
 /**
  * This Entity represents a Pokedex collection for a specific generation.
  * It aggregates PokemonSpecies and tracks completion progress.
- * 
+ *
  * Domain Rules for Pokedex:
  * - A Pokedex must contain at least one PokemonSpecies.
  * - The generation determines which Pokemon are valid (Gen 1: 1-151, Gen 2: 1-251, etc.).
  * - Progress is calculated based on the caught state of all Pokemon in the collection.
  * - A Pokedex can be a regional dex (specific generation) or a national dex (all generations).
  * - Pokedex is immutable after creation.
- * 
+ *
  * TODO:
+ * - Add constraint to have a fixed size (no partial pokedex)
  * - Add support for multiple generations (Gen 2, Gen 3, etc.).
  * - Add filtering by caught state (show only caught, pending, or not caught).
  * - Add sorting options (by ID, by name, by caught state).
- * 
+ * - Add support for formDex. Should have the different form of pokemon (Deoxys, Rotom, etc.) or female form in case it exists.
+ *
  * @property generation The generation this Pokedex represents (e.g., 1 for Gen 1).
  * @property species Array of PokemonSpecies in this Pokedex.
  * @property isNationalDex Whether this is a national Pokedex (spanning multiple generations).
