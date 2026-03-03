@@ -7,6 +7,26 @@ interface PokedexData {
   isNationalDex?: boolean;
 }
 
+/**
+ * This Entity represents a Pokedex collection for a specific generation.
+ * It aggregates PokemonSpecies and tracks completion progress.
+ * 
+ * Domain Rules for Pokedex:
+ * - A Pokedex must contain at least one PokemonSpecies.
+ * - The generation determines which Pokemon are valid (Gen 1: 1-151, Gen 2: 1-251, etc.).
+ * - Progress is calculated based on the caught state of all Pokemon in the collection.
+ * - A Pokedex can be a regional dex (specific generation) or a national dex (all generations).
+ * - Pokedex is immutable after creation.
+ * 
+ * TODO:
+ * - Add support for multiple generations (Gen 2, Gen 3, etc.).
+ * - Add filtering by caught state (show only caught, pending, or not caught).
+ * - Add sorting options (by ID, by name, by caught state).
+ * 
+ * @property generation The generation this Pokedex represents (e.g., 1 for Gen 1).
+ * @property species Array of PokemonSpecies in this Pokedex.
+ * @property isNationalDex Whether this is a national Pokedex (spanning multiple generations).
+ */
 export class Pokedex {
   private readonly _generation: number;
   private readonly _isNationalDex: boolean;
@@ -36,12 +56,22 @@ export class Pokedex {
     return this._isNationalDex;
   }
 
+  /**
+   * Retrieves a Pokemon by its ID.
+   * @param id The Pokemon's ID number.
+   * @returns The PokemonSpecies matching the ID.
+   * @throws DomainError if no Pokemon with the given ID exists in this Pokedex.
+   */
   getPokemon(id: number): PokemonSpecies {
     const pokemon = this._species.find((pokemon) => pokemon.id === id);
     if (!pokemon) throw new DomainError("Pokemon does not exist");
     return pokemon;
   }
 
+  /**
+   * Calculates the completion percentage of this Pokedex.
+   * @returns A number between 0 and 100 representing the percentage of caught Pokemon.
+   */
   getProgress() {
     return (
       (this._species.filter((pokemon) => pokemon.caughtState.isCaught).length /
@@ -50,10 +80,18 @@ export class Pokedex {
     );
   }
 
+  /**
+   * Checks if the Pokedex is 100% complete (all Pokemon caught).
+   */
   get isComplete() {
     return this.getProgress() === 100;
   }
 
+  /**
+   * Compares this Pokedex with another for equality.
+   * Two Pokedexes are equal if they have the same generation, national dex status, and species count.
+   * @param other The Pokedex to compare against.
+   */
   equals(other: Pokedex) {
     return (
       this._generation === other.generation &&
