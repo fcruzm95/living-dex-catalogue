@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test } from "vitest";
 import { DomainError } from "../errors/DomainError";
-import { PokemonSpecies } from "./PokemonSpecies";
+import { PokemonSpecies, type PokemonSpeciesData } from "./PokemonSpecies";
 import { GameVersion, GameVersionValues } from "../value-objects/GameVersion";
 import { CaughtState } from "../value-objects/CaughtState";
 
 describe("PokemonSpecies tests", () => {
   describe("Can create a pokemonSpecies", () => {
     test("Can create a pokemonSpecies", () => {
-      const newPokemonData = {
+      const newPokemonData: PokemonSpeciesData = {
         id: 1,
         name: "Bulbasaur",
         availableIn: [
@@ -31,6 +31,25 @@ describe("PokemonSpecies tests", () => {
         GameVersion.yellow(),
       ]);
       expect(bulbasaur.caughtState).toEqual(CaughtState.notCaught());
+    });
+    test("Can create a pokemonSpecies with a specific caughtState", () => {
+      const newPokemonData: PokemonSpeciesData = {
+        id: 1,
+        name: "Bulbasaur",
+        availableIn: [
+          GameVersionValues.BLUE,
+          GameVersionValues.RED,
+          GameVersionValues.YELLOW,
+        ],
+        generation: 1,
+        caughtState: CaughtState.caught(),
+      };
+      expect(() => PokemonSpecies.create(newPokemonData)).not.toThrowError();
+      const bulbasaur = PokemonSpecies.create(newPokemonData);
+
+      expect(bulbasaur.caughtState).not.toEqual(CaughtState.notCaught());
+      expect(bulbasaur.caughtState).not.toEqual(CaughtState.pending());
+      expect(bulbasaur.caughtState).toEqual(CaughtState.caught());
     });
 
     test("Rejects invalid Pokemon Id", () => {

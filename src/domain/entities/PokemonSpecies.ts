@@ -8,6 +8,7 @@ export interface PokemonSpeciesData {
   name: string;
   generation: number;
   availableIn: string[];
+  caughtState?: CaughtState;
 }
 
 /**
@@ -49,9 +50,10 @@ export class PokemonSpecies {
     name: string,
     generation: number,
     availableIn: GameVersion[],
+    caughtState?: CaughtState,
   ) {
     this._id = id;
-    this._caughtState = CaughtState.create();
+    this._caughtState = caughtState ?? CaughtState.create();
     this._name = name;
     this._spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/transparent/${id.value}.png`;
     this._generation = generation;
@@ -70,6 +72,7 @@ export class PokemonSpecies {
       validName,
       pokemonSpeciesData.generation,
       validAvailableIn,
+      pokemonSpeciesData.caughtState,
     );
   }
 
