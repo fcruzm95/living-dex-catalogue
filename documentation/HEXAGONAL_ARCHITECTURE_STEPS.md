@@ -4,6 +4,37 @@ A step-by-step guide for implementing a traditional hexagonal (clean) architectu
 
 ---
 
+## Table of Contents
+
+1. [Architecture Overview](#architecture-overview)
+2. [Key Principles](#key-principles)
+3. [Implementation Order](#implementation-order)
+4. [Why This Order? (Beginner's Guide)](#why-this-order-beginners-guide)
+   - [The House Building Analogy](#the-house-building-analogy)
+   - [The Complete Flow](#the-complete-flow)
+   - [Summary Table](#summary-table)
+5. [Questions to Ask Yourself (By Step)](#questions-to-ask-yourself-by-step)
+   - [Step 1: Domain Layer](#step-1-domain-layer)
+   - [Step 2: Application Layer (Ports)](#step-2-application-layer-ports)
+   - [Step 3: Application Layer (Use Cases)](#step-3-application-layer-use-cases)
+   - [Step 4: Infrastructure Layer](#step-4-infrastructure-layer)
+   - [Step 5: Composition Root](#step-5-composition-root)
+   - [Step 6: UI Layer](#step-6-ui-layer)
+   - [Cross-Cutting Questions](#cross-cutting-questions)
+6. [Tips & Best Practices](#tips--best-practices)
+   - [Keep Ports Minimal (YAGNI Principle)](#keep-ports-minimal-yagni-principle)
+   - [Domain State Machines vs Use Case Logic](#domain-state-machines-vs-use-case-logic)
+7. [Testing Strategy](#testing-strategy)
+8. [Quick Reference: "Is This Right?"](#quick-reference-is-this-right)
+9. [Implementation Steps (Detailed)](#implementation-steps-detailed)
+   - [Step 1: Domain Layer (Complete)](#-step-1-domain-layer-complete)
+   - [Step 2: Application Layer (Ports & Use Cases)](#-step-2-application-layer-ports--use-cases)
+   - [Step 3: Infrastructure Layer (Adapters)](#-step-3-infrastructure-layer-adapters)
+   - [Step 4: Composition Root (Dependency Injection)](#-step-4-composition-root-dependency-injection)
+   - [Step 5: UI Layer (React Components)](#-step-5-ui-layer-react-components)
+
+---
+
 ## Architecture Overview
 
 ```
@@ -230,6 +261,39 @@ Need to get Pokemon?
 ├── Just in-memory data? → No port needed, construct in domain
 └── From multiple sources? → One port, multiple adapters
 ```
+
+**Repository vs Low-Level Client:**
+
+Understand the difference between high-level Repository ports and low-level API clients:
+
+```
+┌─────────────────────────────────────┐
+│         Application Layer           │
+│   PokemonRepository.findById()      │ ← Returns PokemonSpecies (Domain)
+├─────────────────────────────────────┤
+│       Infrastructure Layer          │
+│   PokemonRepositoryImpl             │
+│     ↓ calls                         │
+│   PokeApiClient.fetchPokemonById()  │ ← Returns raw API data (DTO)
+├─────────────────────────────────────┤
+│        External System              │
+│        PokeAPI HTTP Endpoint        │
+└─────────────────────────────────────┘
+```
+
+**PokemonRepository** (High-level, Domain-focused):
+- Returns `PokemonSpecies` (domain entity)
+- May cache results
+- Handles "not found" gracefully (returns null)
+- **Application layer** depends on this
+
+**PokeApiClient** (Low-level, Technical):
+- Returns `PokemonApiResponse` (raw DTO)
+- Just makes HTTP calls
+- Throws on HTTP errors
+- **Infrastructure layer** uses this internally
+
+**Rule:** Repository is what your **use cases** call. API client is what your **infrastructure** uses internally!
 
 ### Step 3: Application Layer (Use Cases)
 
