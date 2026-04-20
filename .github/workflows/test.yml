@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@de0fac2c87a2f8e6c3f33f47ff8e92faa0d35f80
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Setup pnpm
-        uses: pnpm/action-setup@fc06bc1471afe38bfb08a6d58c130f547fe2dbc6
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320
         with:
           version: 10
           cache: true
