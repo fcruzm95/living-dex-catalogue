@@ -4,14 +4,16 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2c87a2f8e6c3f33f47ff8e92faa0d35f80
       - name: Setup pnpm
-        uses: pnpm/action-setup@v5.0.0
+        uses: pnpm/action-setup@fc06bc1471afe38bfb08a6d58c130f547fe2dbc6
         with:
           version: 10
           cache: true
