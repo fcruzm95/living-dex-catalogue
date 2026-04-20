@@ -2,8 +2,23 @@ name: Test
 on:
   push:
     branches: [master]
+    paths: # Runs this workflow only when those files change.
+      - "*.test.ts"
+      - "*.test.tsx"
+      - "pnpm-lock.yaml"
+      - "package.json"
+      - ".github/workflows/test.yml"
   pull_request:
     branches: [master]
+    paths: # Runs this workflow only when those files change.
+      - "*.test.ts"
+      - "*.test.tsx"
+      - "pnpm-lock.yaml"
+      - "package.json"
+      - ".github/workflows/test.yml"
+concurrency: # If there is a workflow running when a new one is created, it cancels the old workflow.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
