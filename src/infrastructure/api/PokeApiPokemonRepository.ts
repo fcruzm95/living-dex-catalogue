@@ -1,4 +1,4 @@
-import type { PokemonRepository } from "../../application/ports/PokemonRepository";
+import type { PokemonRepository } from "../../domain/ports/PokemonRepository";
 import type { PokemonSpecies } from "../../domain/entities/PokemonSpecies";
 import type { PokemonId } from "../../domain/value-objects/PokemonId";
 

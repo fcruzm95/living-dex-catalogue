@@ -253,6 +253,12 @@ Use this checklist when implementing each layer. If you can't answer these quest
 - Can I implement this with the external system I have in mind?
 - Is this method specific enough, or too generic?
 
+**Where should a port reside?**
+
+- In hexagonal architecture ports should reside in the domain layer as they specify business logic.
+- In my interpretation the ports should reside in the application layer because they are interacting with the application layer and the outside world.
+- In this project the ports should reside in the domain layer as is the "strict" hexagonal architecture.
+
 **Example decision tree:**
 
 ```
@@ -282,12 +288,14 @@ Understand the difference between high-level Repository ports and low-level API 
 ```
 
 **PokemonRepository** (High-level, Domain-focused):
+
 - Returns `PokemonSpecies` (domain entity)
 - May cache results
 - Handles "not found" gracefully (returns null)
 - **Application layer** depends on this
 
 **PokeApiClient** (Low-level, Technical):
+
 - Returns `PokemonApiResponse` (raw DTO)
 - Just makes HTTP calls
 - Throws on HTTP errors

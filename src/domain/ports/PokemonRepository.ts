@@ -1,5 +1,5 @@
-import type { PokemonSpecies } from "../../domain/entities/PokemonSpecies";
-import type { PokemonId } from "../../domain/value-objects/PokemonId";
+import type { PokemonSpecies } from "../entities/PokemonSpecies";
+import type { PokemonId } from "../value-objects/PokemonId";
 
 /**
  * The DTO should live in the infrastructure folder.
