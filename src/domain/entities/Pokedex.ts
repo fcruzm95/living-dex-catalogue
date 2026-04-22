@@ -39,7 +39,6 @@ export class Pokedex {
     this._generation = data.generation;
     this._species = data.species;
     this._isNationalDex = data.isNationalDex ?? false;
-    Object.freeze(this);
   }
 
   static create(data: PokedexData) {
