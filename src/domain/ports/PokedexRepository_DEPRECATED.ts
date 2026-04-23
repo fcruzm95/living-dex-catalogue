@@ -10,7 +10,7 @@ import type { PokemonId } from "../value-objects/PokemonId";
  * - 2. Persistance of data.
  *
  * Instead this repository should be divided in 2.
- * The PokemonDataProvider
+ * The PokemonDataProvider to fetch the data and PokedexProgressRepository to track the progress of the user.
  */
 export interface PokedexRepository {
   /**

@@ -1,10 +1,22 @@
+export interface PokeApiGenerationDTO {
+  id: number;
+  name: string;
+  abilities: PokeApiNamedAPIResourceDTO[];
+  names: PokeApiNameDTO;
+  main_region: PokeApiNamedAPIResourceDTO[];
+  moves: PokeApiNamedAPIResourceDTO[];
+  pokemon_species: PokeApiNamedAPIResourceDTO[];
+  types: PokeApiNamedAPIResourceDTO[];
+  version_groups: PokeApiNamedAPIResourceDTO[];
+}
+
 export interface PokeApiDTO {
   id: number;
   name: string;
-  species: PokeApiSpeciesDTO;
+  species: PokeApiNamedAPIResourceDTO;
   is_default: boolean;
   order: number;
-  forms: PokeApiFormDTO[];
+  forms: PokeApiNamedAPIResourceDTO[];
   game_indices: PokeApiGameIndexDTO[];
   location_area_encounters: string;
   types: PokeApiTypeDTO[];
@@ -12,37 +24,28 @@ export interface PokeApiDTO {
   sprites: PokeApiSpriteDTO[];
 }
 
-export interface PokeApiSpeciesDTO {
+export interface PokeApiNameDTO {
   name: string;
-  url: string;
+  language: PokeApiNamedAPIResourceDTO;
 }
 
-export interface PokeApiFormDTO {
+export interface PokeApiNamedAPIResourceDTO {
   name: string;
   url: string;
 }
 
 export interface PokeApiGameIndexDTO {
   game_index: number;
-  version: {
-    name: string;
-    url: string;
-  };
+  version: PokeApiNamedAPIResourceDTO;
 }
 
 export interface PokeApiTypeDTO {
   slot: number;
-  type: {
-    name: string;
-    url: string;
-  };
+  type: PokeApiNamedAPIResourceDTO;
 }
 
 export interface PokeApiPastTypeDTO {
-  generation: {
-    name: string;
-    url: string;
-  };
+  generation: PokeApiNamedAPIResourceDTO;
   types: PokeApiTypeDTO[];
 }
 

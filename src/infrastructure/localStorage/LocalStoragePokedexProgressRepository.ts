@@ -3,6 +3,9 @@ import type { PokedexProgressRepository } from "../../domain/ports/PokedexProgre
 import type { CaughtState } from "../../domain/value-objects/CaughtState";
 import type { PokemonId } from "../../domain/value-objects/PokemonId";
 
+/**
+ * TODO
+ */
 export class LocalStoragePokedexProgressRepository implements PokedexProgressRepository {
   updatePokemonCaughtState(id: PokemonId, state: CaughtState): Promise<void> {
     throw new Error("Method not implemented.");
