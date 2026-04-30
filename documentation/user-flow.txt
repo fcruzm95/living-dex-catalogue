@@ -1,0 +1,6 @@
+Idea:
+
+1. User wants to create pokedex.
+2. User clicks new pokedex button.
+3. Selects which game version.
+4. Starts adding new pokemon.

@@ -14,6 +14,16 @@ export const GameVersionValues = {
 export type GameVersionValues =
   (typeof GameVersionValues)[keyof typeof GameVersionValues];
 
+const exclusivePokemon = {
+  [GameVersionValues.RED]: new Set([
+    23, 24, 43, 44, 45, 56, 57, 58, 59, 123, 125,
+  ]),
+  [GameVersionValues.BLUE]: new Set([
+    27, 28, 37, 38, 52, 53, 69, 70, 71, 126, 127,
+  ]),
+  [GameVersionValues.YELLOW]: new Set([]),
+};
+
 /**
  * Value Object representing a Pokemon game version.
  * Tracks which game versions a Pokemon is available in.
@@ -33,11 +43,23 @@ export type GameVersionValues =
  */
 export class GameVersion {
   private readonly _name: string;
+  private readonly _exclusivePokemon: Set<number>;
 
   private constructor(name: string) {
     const formattedName = this._format(name);
     this._validate(formattedName);
     this._name = formattedName;
+    switch (formattedName) {
+      case GameVersionValues.RED:
+        this._exclusivePokemon = exclusivePokemon[GameVersionValues.RED];
+        break;
+      case GameVersionValues.BLUE:
+        this._exclusivePokemon = exclusivePokemon[GameVersionValues.BLUE];
+        break;
+      default: // Yellow
+        this._exclusivePokemon = exclusivePokemon[GameVersionValues.YELLOW];
+        break;
+    }
     Object.freeze(this);
   }
 
@@ -77,6 +99,10 @@ export class GameVersion {
 
   get name() {
     return this._name;
+  }
+
+  get availablePokemon() {
+    return this._exclusivePokemon;
   }
 
   /**

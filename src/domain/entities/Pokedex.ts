@@ -1,9 +1,11 @@
 import { DomainError } from "../errors/DomainError";
+import type { GameVersion } from "../value-objects/GameVersion";
 import type { PokemonSpecies } from "./PokemonSpecies";
 
 interface PokedexData {
   generation: number;
   species: PokemonSpecies[];
+  gameVersion: GameVersion;
   isNationalDex?: boolean;
 }
 
@@ -17,6 +19,7 @@ interface PokedexData {
  * - Progress is calculated based on the caught state of all Pokemon in the collection.
  * - A Pokedex can be a regional dex (specific generation) or a national dex (all generations).
  * - Pokedex is immutable after creation.
+ * - If its a generation 1 pokedex, then it can only be national (no more pokemon).
  *
  * TODO:
  * - Add constraint to have a fixed size (no partial pokedex)
@@ -26,19 +29,23 @@ interface PokedexData {
  * - Add support for formDex. Should have the different form of pokemon (Deoxys, Rotom, etc.) or female form in case it exists.
  *
  * @property generation The generation this Pokedex represents (e.g., 1 for Gen 1).
- * @property species Array of PokemonSpecies in this Pokedex.
+ * @property species Contains PokemonSpecies in this Pokedex. // Should it be an array or Map?
  * @property isNationalDex Whether this is a national Pokedex (spanning multiple generations).
+ * @property gameVersion Indicates in which game version you're filling the pokedex.
  */
 export class Pokedex {
   private readonly _generation: number;
   private readonly _isNationalDex: boolean;
   private readonly _species: PokemonSpecies[];
+  private readonly _gameVersion: GameVersion;
 
   private constructor(data: PokedexData) {
     this._validate(data);
     this._generation = data.generation;
     this._species = data.species;
-    this._isNationalDex = data.isNationalDex ?? false;
+    this._gameVersion = data.gameVersion;
+    this._isNationalDex =
+      data.generation === 1 ? true : (data.isNationalDex ?? false);
   }
 
   static create(data: PokedexData) {
@@ -55,6 +62,10 @@ export class Pokedex {
 
   get isNationalDex() {
     return this._isNationalDex;
+  }
+
+  get gameVersion() {
+    return this._gameVersion;
   }
 
   /**

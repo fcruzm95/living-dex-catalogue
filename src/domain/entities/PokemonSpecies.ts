@@ -9,6 +9,8 @@ export interface PokemonSpeciesData {
   generation: number;
   availableIn: string[];
   caughtState?: CaughtState;
+  isGameVersionExclusive: boolean;
+  gameVersionExclusiveTo: GameVersion;
 }
 
 /**
@@ -43,37 +45,54 @@ export class PokemonSpecies {
   private readonly _name: string;
   private readonly _spriteUrl: string;
   private readonly _generation: number; // Not sure if this goes here or in pokedex.
-  private readonly _availableIn: GameVersion[];
+  // private readonly _availableIn: GameVersion[];
+  private readonly _isGameVersionExclusive: boolean;
+  private readonly _gameVersionExclusiveTo: GameVersion;
 
-  private constructor(
-    id: PokemonId,
-    name: string,
-    generation: number,
-    availableIn: GameVersion[],
-    caughtState?: CaughtState,
-  ) {
-    this._id = id;
-    this._caughtState = caughtState ?? CaughtState.create();
-    this._name = name;
-    this._spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/transparent/${id.value}.png`;
-    this._generation = generation;
-    this._availableIn = availableIn;
+  private constructor(data: {
+    id: PokemonId;
+    name: string;
+    generation: number;
+    // availableIn: GameVersion[],
+    isGameVersionExclusive: boolean;
+    gameVersionExclusiveTo: GameVersion;
+    caughtState?: CaughtState;
+  }) {
+    // const {
+    //   id,
+    //   name,
+    //   generation,
+    //   // availableIn,
+    //   isGameVersionExclusive,
+    //   gameVersionExclusiveTo,
+    //   caughtState,
+    // } = data;
+    this._id = data.id;
+    this._caughtState = data.caughtState ?? CaughtState.create();
+    this._name = data.name;
+    this._spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-i/yellow/transparent/${data.id.value}.png`;
+    this._generation = data.generation;
+    // this._availableIn = data.availableIn;
+    this._isGameVersionExclusive = data.isGameVersionExclusive;
+    this._gameVersionExclusiveTo = data.gameVersionExclusiveTo;
   }
 
   static create(pokemonSpeciesData: PokemonSpeciesData) {
     this._validate(pokemonSpeciesData);
     const validId = PokemonId.create(pokemonSpeciesData.id);
-    const validAvailableIn = pokemonSpeciesData.availableIn.map((version) =>
-      GameVersion.create(version),
-    );
+    // const validAvailableIn = pokemonSpeciesData.availableIn.map((version) =>
+    //   GameVersion.create(version),
+    // );
     const validName = this._formatName(pokemonSpeciesData.name);
-    return new PokemonSpecies(
-      validId,
-      validName,
-      pokemonSpeciesData.generation,
-      validAvailableIn,
-      pokemonSpeciesData.caughtState,
-    );
+    return new PokemonSpecies({
+      id: validId,
+      name: validName,
+      generation: pokemonSpeciesData.generation,
+      // validAvailableIn,
+      caughtState: pokemonSpeciesData.caughtState,
+      isGameVersionExclusive: pokemonSpeciesData.isGameVersionExclusive,
+      gameVersionExclusiveTo: pokemonSpeciesData.gameVersionExclusiveTo,
+    });
   }
 
   get id(): number {
@@ -96,30 +115,38 @@ export class PokemonSpecies {
     return this._generation;
   }
 
-  get availableIn(): GameVersion[] {
-    return this._availableIn;
+  get isExclusive(): boolean {
+    return this._isGameVersionExclusive;
   }
 
-  get isRedExclusive(): boolean {
-    return (
-      this._availableIn.length === 1 &&
-      GameVersion.red().equals(this._availableIn[0])
-    );
+  get gameVersionExclusiveTo(): GameVersion {
+    return this._gameVersionExclusiveTo;
   }
 
-  get isBlueExclusive(): boolean {
-    return (
-      this._availableIn.length === 1 &&
-      GameVersion.blue().equals(this._availableIn[0])
-    );
-  }
+  // get availableIn(): GameVersion[] {
+  //   return this._availableIn;
+  // }
 
-  get isYellowExclusive(): boolean {
-    return (
-      this._availableIn.length === 1 &&
-      GameVersion.yellow().equals(this._availableIn[0])
-    );
-  }
+  // get isRedExclusive(): boolean {
+  //   return (
+  //     this._availableIn.length === 1 &&
+  //     GameVersion.red().equals(this._availableIn[0])
+  //   );
+  // }
+
+  // get isBlueExclusive(): boolean {
+  //   return (
+  //     this._availableIn.length === 1 &&
+  //     GameVersion.blue().equals(this._availableIn[0])
+  //   );
+  // }
+
+  // get isYellowExclusive(): boolean {
+  //   return (
+  //     this._availableIn.length === 1 &&
+  //     GameVersion.yellow().equals(this._availableIn[0])
+  //   );
+  // }
 
   updateCaughtState() {
     this._caughtState = this._caughtState.next();
